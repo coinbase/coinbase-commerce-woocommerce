@@ -1,0 +1,19 @@
+$ phpunit-6.5.8
+
+Installing...
+Running as single site... To run multisite, use -c tests/phpunit/multisite.xml
+
+Notice: /private/tmp/wordpress-tests-lib/includes/../data/themedir1 is not readable in /private/tmp/wordpress/wp-includes/theme.php on line 471
+Not running ajax tests. To execute these, use --group ajax.
+Not running ms-files tests. To execute these, use --group ms-files.
+Not running external-http tests. To execute these, use --group external-http.
+PHPUnit 6.5.8 by Sebastian Bergmann and contributors.
+
+Runtime:       PHP 7.1.14
+Configuration: /Users/edd/Apollo/sites/coinbase-commerce.prag/wp-content/plugins/coinbase-commerce/phpunit.xml
+
+....                                                                4 / 4 (100%)
+
+Time: 2.23 seconds, Memory: 42.00MB
+
+OK (4 tests, 7 assertions)
