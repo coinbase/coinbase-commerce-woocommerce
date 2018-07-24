@@ -76,7 +76,7 @@ The plugin supports all cryptocurrencies available at [Coinbase Commerce]
 
 ## License
 
-This project is licensed under the GPL 3.0 License - see the [GPL] license for details
+This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
@@ -93,7 +93,6 @@ This project is licensed under the GPL 3.0 License - see the [GPL] license for d
 
 [Coinbase Commerce]: <https://commerce.coinbase.com/>
 [Coinbase Commerce settings page]: <https://commerce.coinbase.com/dashboard/settings/>
-[GPL]: <https://www.gnu.org/licenses/gpl-3.0.html>
 [WooCommerce]: <https://woocommerce.com/>
 [WordPress]: <https://wordpress.org/>
 
