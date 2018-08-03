@@ -6,7 +6,7 @@ A WooCommerce payment gateway that allows your customers to pay with cryptocurre
 
 ### From this repository
 
-Within the Github repository, click the Clone or Download button and Download a zip file of the repository, or clone it directly via commant line.
+Within the Github repository, click the Clone or Download button and Download a zip file of the repository, or clone it directly via command line.
 
 Within your WordPress administration panel, go to Plugins > Add New and click the Upload Plugin button on the top of the page.
 
