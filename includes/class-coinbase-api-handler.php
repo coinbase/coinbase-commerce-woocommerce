@@ -34,23 +34,31 @@ class Coinbase_API_Handler {
 	/**
 	 * Get the response from an API request.
 	 * @param  string $endpoint
-	 * @param  array  $args
+	 * @param  array  $params
 	 * @param  string $method
 	 * @return array
 	 */
-	public static function send_request( $endpoint, $args = array(), $method = 'GET' ) {
-		$url = esc_url_raw( add_query_arg( $args, self::$api_url . $endpoint ) );
-		// phpcs:ignore
-		self::log( 'Coinbase Request Args for ' . $endpoint . ': ' . print_r( $args, true ) );
-		$args = array(
-			'method'  => $method,
-			'headers' => array(
-				'X-CC-Api-Key' => self::$api_key,
-				'X-CC-Version' => self::$api_version,
-			),
-		);
+	public static function send_request( $endpoint, $params = array(), $method = 'GET' ) {
 
-		$response = wp_remote_request( $url, $args );
+        $args = array(
+            'method'  => $method,
+            'headers' => array(
+                'X-CC-Api-Key' => self::$api_key,
+                'X-CC-Version' => self::$api_version,
+                'Content-Type' => 'application/json'
+            )
+        );
+
+        $url = self::$api_url . $endpoint;
+
+        if (in_array( $method, array('POST', 'PUT') ) ) {
+            $args['body'] = json_encode($params);
+        } else {
+            $url = add_query_arg( $params, $url );
+        }
+		// phpcs:ignore
+		self::log( 'Coinbase Request Args for ' . $endpoint . ': ' . print_r( $params, true ) );
+		$response = wp_remote_request( esc_url_raw($url), $args);
 
 		if ( is_wp_error( $response ) ) {
 			self::log( 'WP response error: ' . $response->get_error_message() );
@@ -111,44 +119,52 @@ class Coinbase_API_Handler {
 	 * @param  string $desc
 	 * @return array
 	 */
-	public static function create_charge( $amount = null, $currency = null, $metadata = null,
-										$redirect = null, $name = null, $desc = null ) {
-		$args = array(
-			'name'        => is_null( $name ) ? get_bloginfo( 'name' ) : $name,
-			'description' => is_null( $desc ) ? get_bloginfo( 'description' ) : $desc,
-		);
+    public static function create_charge($params)
+    {
+        $args = array(
+            'name' => is_null($params['name']) ? get_bloginfo('name') : $params['name'],
+            'description' => is_null($params['desc']) ? get_bloginfo('description') : $params['desc'],
+        );
 
-		if ( is_null( $amount ) ) {
-			$args['pricing_type'] = 'no_price';
-		} elseif ( is_null( $currency ) ) {
-			self::log( 'Error: if amount if given, currency must be given (in create_charge()).', 'error' );
-			return array( false, 'Missing currency.' );
-		} else {
-			$args['pricing_type'] = 'fixed_price';
-			$args['local_price']  = array(
-				'amount'   => $amount,
-				'currency' => $currency,
-			);
-		}
+        if (is_null($params['amount']) || !is_numeric($params['amount'])) {
+            self::log('Error: amount is missing or invalid.', 'error');
+            return array(false, 'Missing amount.');
+        }
 
-		if ( ! is_null( $metadata ) ) {
-			$args['metadata'] = $metadata;
-		}
-		if ( ! is_null( $redirect ) ) {
-			$args['redirect_url'] = $redirect;
-		}
+        if (is_null($params['currency'])) {
+            self::log('Error: if amount if given, currency must be given (in create_charge()).', 'error');
+            return array(false, 'Missing currency.');
+        }
 
-		$result = self::send_request( 'charges', $args, 'POST' );
+        $args['pricing_type'] = 'fixed_price';
+        $args['local_price'] = array(
+            'amount' => $params['amount'],
+            'currency' => $params['currency'],
+        );
 
-		// Cache last-known available payment methods.
-		if ( ! empty( $result[1]['data']['addresses'] ) ) {
-			update_option(
-				'coinbase_payment_methods',
-				array_keys( $result[1]['data']['addresses'] ),
-				false
-			);
-		}
 
-		return $result;
-	}
+        if (!is_null($params['metadata'])) {
+            $args['metadata'] = $params['metadata'];
+        }
+        if (!is_null($params['redirect'])) {
+            $args['redirect_url'] = $params['redirect'];
+        }
+
+        if (!is_null($params['cancel'])) {
+            $args['cancel_url'] = $params['cancel'];
+        }
+
+        $result = self::send_request('charges', $args, 'POST');
+
+        // Cache last-known available payment methods.
+        if (!empty($result[1]['data']['addresses'])) {
+            update_option(
+                'coinbase_payment_methods',
+                array_keys($result[1]['data']['addresses']),
+                false
+            );
+        }
+
+        return $result;
+    }
 }

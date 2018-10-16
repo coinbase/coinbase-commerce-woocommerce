@@ -184,35 +184,71 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 	 * @param  int $order_id
 	 * @return array
 	 */
-	public function process_payment( $order_id ) {
-		$order = wc_get_order( $order_id );
+    public function process_payment($order_id)
+    {
+        $order = wc_get_order($order_id);
+        $description = null;
 
-		$this->init_api();
 
-		// Create a new charge.
-		$metadata = array(
-			'order_id'  => $order->get_id(),
-			'order_key' => $order->get_order_key(),
-		);
-		$result   = Coinbase_API_Handler::create_charge(
-			$order->get_total(), get_woocommerce_currency(), $metadata,
-			$this->get_return_url( $order )
-		);
+        //Create description for charge based on order's products. Ex: 1 x Product1, 2 x Product2
+        try {
+            $orderItems = array_map(function($item) {
+               return $item['quantity'] . ' x ' . $item['name'];
+            }, $order->get_items());
 
-		if ( ! $result[0] ) {
-			return array( 'result' => 'fail' );
-		}
+            $description = mb_substr(implode(', ', $orderItems), 0, 200);
+        } catch (Exception $e) {
+        }
 
-		$charge = $result[1]['data'];
+        $this->init_api();
 
-		$order->update_meta_data( '_coinbase_charge_id', $charge['code'] );
-		$order->save();
+        // Create a new charge.
+        $metadata = array(
+            'order_id' => $order->get_id(),
+            'order_key' => $order->get_order_key(),
+        );
+        $result = Coinbase_API_Handler::create_charge(
+            array(
+                'amount' => $order->get_total(),
+                'currency' => get_woocommerce_currency(),
+                'metadata' => $metadata,
+                'redirect' => $this->get_return_url($order),
+                'cancel' => $this->get_cancel_url($order),
+                'desc' => $description
+            )
+        );
 
-		return array(
-			'result'   => 'success',
-			'redirect' => $charge['hosted_url'],
-		);
-	}
+        if (!$result[0]) {
+            return array('result' => 'fail');
+        }
+
+        $charge = $result[1]['data'];
+
+        $order->update_meta_data('_coinbase_charge_id', $charge['code']);
+        $order->save();
+
+        return array(
+            'result' => 'success',
+            'redirect' => $charge['hosted_url'],
+        );
+    }
+
+    /**
+     * Get the cancel url.
+     *
+     * @param WC_Order $order Order object.
+     * @return string
+     */
+    public function get_cancel_url($order)
+    {
+        $return_url = $order->get_cancel_order_url();
+
+        if ( is_ssl() || get_option( 'woocommerce_force_ssl_checkout' ) == 'yes' ) {
+            $return_url = str_replace( 'http:', 'https:', $return_url );
+        }
+
+        return $return_url;
+    }
 
 	/**
 	 * Check payment statuses on orders and update order statuses.
