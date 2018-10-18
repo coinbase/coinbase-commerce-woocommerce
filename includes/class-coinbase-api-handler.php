@@ -138,8 +138,8 @@ class Coinbase_API_Handler {
 
         $args['pricing_type'] = 'fixed_price';
         $args['local_price'] = array(
-            'amount' => $params['amount'],
             'currency' => $params['currency'],
+            'amount' => $params['amount']
         );
 
 

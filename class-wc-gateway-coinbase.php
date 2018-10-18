@@ -189,7 +189,6 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
         $order = wc_get_order($order_id);
         $description = null;
 
-
         //Create description for charge based on order's products. Ex: 1 x Product1, 2 x Product2
         try {
             $orderItems = array_map(function($item) {
