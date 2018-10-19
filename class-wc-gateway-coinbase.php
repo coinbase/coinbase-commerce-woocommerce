@@ -116,7 +116,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				'title'       => __( 'Title', 'woocommerce' ),
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
-				'default'     => __( 'Bitcoin and other cryptocurrencies', 'coinbase' ),
+				'default'     => __( 'Coinbase Commerce <a href="https://commerce.coinbase.com/" target="_blank">(Learn more)</a>', 'coinbase' ),
 				'desc_tip'    => true,
 			),
 			'description'    => array(
