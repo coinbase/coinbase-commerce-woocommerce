@@ -341,6 +341,8 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 			if ( 'EXPIRED' === $status ) {
 				$order->update_status( 'cancelled', __( 'Coinbase payment expired.', 'coinbase' ) );
+			} elseif ( 'CANCELED' === $status ) {
+				$order->update_status( 'cancelled', __( 'Coinbase payment cancelled.', 'coinbase' ) );
 			} elseif ( 'UNRESOLVED' === $status ) {
 				// translators: Coinbase error status for "unresolved" payment. Includes error status.
 				$order->update_status( 'failed', sprintf( __( 'Coinbase payment unresolved, reason: %s.', 'coinbase' ), $last_update['context'] ) );
