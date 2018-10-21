@@ -80,6 +80,9 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
+## 1.0.2 ##
+Added support for charge cancel url
+
 ## 1.0.1 ##
 * Tested against WordPress 4.9.7
 * Tested against WooCommerce 3.4.3

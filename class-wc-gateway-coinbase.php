@@ -187,6 +187,17 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 	public function process_payment( $order_id ) {
 		$order = wc_get_order( $order_id );
 
+		// Create description for charge based on order's products. Ex: 1 x Product1, 2 x Product2
+		try {
+			$order_items = array_map( function( $item ) {
+				return $item['quantity'] . ' x ' . $item['name'];
+			}, $order->get_items() );
+
+			$description = mb_substr( implode( ', ', $order_items ), 0, 200 );
+		} catch ( Exception $e ) {
+			$description = null;
+		}
+
 		$this->init_api();
 
 		// Create a new charge.
@@ -196,7 +207,8 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		);
 		$result   = Coinbase_API_Handler::create_charge(
 			$order->get_total(), get_woocommerce_currency(), $metadata,
-			$this->get_return_url( $order )
+			$this->get_return_url( $order ), null, $description,
+			$this->get_cancel_url( $order )
 		);
 
 		if ( ! $result[0] ) {
@@ -212,6 +224,22 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			'result'   => 'success',
 			'redirect' => $charge['hosted_url'],
 		);
+	}
+
+	/**
+	 * Get the cancel url.
+	 *
+	 * @param WC_Order $order Order object.
+	 * @return string
+	 */
+	public function get_cancel_url( $order ) {
+		$return_url = $order->get_cancel_order_url();
+
+		if ( is_ssl() || get_option( 'woocommerce_force_ssl_checkout' ) == 'yes' ) {
+			$return_url = str_replace( 'http:', 'https:', $return_url );
+		}
+
+		return apply_filters( 'woocommerce_get_cancel_url', $return_url, $order );
 	}
 
 	/**
