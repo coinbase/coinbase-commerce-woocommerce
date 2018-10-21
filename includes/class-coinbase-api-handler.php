@@ -126,6 +126,8 @@ class Coinbase_API_Handler {
 			'name'        => is_null( $name ) ? get_bloginfo( 'name' ) : $name,
 			'description' => is_null( $desc ) ? get_bloginfo( 'description' ) : $desc,
 		);
+		$args['name'] = sanitize_text_field( $args['name'] );
+		$args['description'] = sanitize_text_field( $args['description'] );
 
 		if ( is_null( $amount ) ) {
 			$args['pricing_type'] = 'no_price';
