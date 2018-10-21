@@ -85,6 +85,10 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 	 * @return string
 	 */
 	public function get_icon() {
+		if ( $this->get_option( 'show_icons' ) === 'no' ) {
+			return '';
+		}
+
 		$image_path = plugin_dir_path( __FILE__ ) . 'assets/images';
 		$icon_html  = '';
 		$methods    = get_option( 'coinbase_payment_methods', array( 'bitcoin', 'bitcoincash', 'ethereum', 'litecoin' ) );
@@ -167,6 +171,12 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				// translators: Step 4 of the instructions for 'webhook shared secrets' on settings page.
 				__( '4. Click "Show shared secret" and paste into the box above.', 'coinbase' ),
 
+			),
+			'show_icons'     => array(
+				'title'       => __( 'Show icons', 'coinbase' ),
+				'type'        => 'checkbox',
+				'label'       => __( 'Display currency icons on checkout page.', 'coinbase' ),
+				'default'     => 'yes',
 			),
 			'debug'          => array(
 				'title'       => __( 'Debug log', 'woocommerce' ),
