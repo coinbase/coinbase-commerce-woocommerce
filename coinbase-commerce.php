@@ -39,6 +39,7 @@ function cb_init_gateway() {
 		add_filter( 'woocommerce_payment_gateways', 'cb_wc_add_coinbase_class' );
 		add_filter( 'wc_order_statuses', 'cb_wc_add_status' );
 		add_action( 'woocommerce_admin_order_data_after_order_details', 'cb_order_meta_general' );
+		add_action( 'woocommerce_order_details_after_order_table', 'cb_order_meta_general' );
 		add_filter( 'woocommerce_email_order_meta_fields', 'cb_custom_woocommerce_email_order_meta_fields', 10, 3 );
 	}
 }
