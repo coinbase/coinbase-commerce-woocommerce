@@ -81,7 +81,9 @@ This project is licensed under the Apache 2.0 License
 ## Changelog
 
 ## 1.0.2 ##
-Added support for charge cancel url
+* Added support for charge cancel url.
+* Handle cancelled events from API.
+* Add option to disable icons on checkout page.
 
 ## 1.0.1 ##
 * Tested against WordPress 4.9.7
