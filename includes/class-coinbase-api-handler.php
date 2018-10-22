@@ -132,7 +132,7 @@ class Coinbase_API_Handler {
 		if ( is_null( $amount ) ) {
 			$args['pricing_type'] = 'no_price';
 		} elseif ( is_null( $currency ) ) {
-			self::log( 'Error: if amount if given, currency must be given (in create_charge()).', 'error' );
+			self::log( 'Error: if amount is given, currency must be given (in create_charge()).', 'error' );
 			return array( false, 'Missing currency.' );
 		} else {
 			$args['pricing_type'] = 'fixed_price';
