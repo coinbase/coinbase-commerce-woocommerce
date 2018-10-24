@@ -34,23 +34,30 @@ class Coinbase_API_Handler {
 	/**
 	 * Get the response from an API request.
 	 * @param  string $endpoint
-	 * @param  array  $args
+	 * @param  array  $params
 	 * @param  string $method
 	 * @return array
 	 */
-	public static function send_request( $endpoint, $args = array(), $method = 'GET' ) {
-		$url = esc_url_raw( add_query_arg( $args, self::$api_url . $endpoint ) );
+	public static function send_request( $endpoint, $params = array(), $method = 'GET' ) {
 		// phpcs:ignore
-		self::log( 'Coinbase Request Args for ' . $endpoint . ': ' . print_r( $args, true ) );
+		self::log( 'Coinbase Request Args for ' . $endpoint . ': ' . print_r( $params, true ) );
 		$args = array(
 			'method'  => $method,
 			'headers' => array(
 				'X-CC-Api-Key' => self::$api_key,
 				'X-CC-Version' => self::$api_version,
-			),
+				'Content-Type' => 'application/json'
+			)
 		);
 
-		$response = wp_remote_request( $url, $args );
+		$url = self::$api_url . $endpoint;
+
+		if ( in_array( $method, array( 'POST', 'PUT' ) ) ) {
+			$args['body'] = json_encode( $params );
+		} else {
+			$url = add_query_arg( $params, $url );
+		}
+		$response = wp_remote_request( esc_url_raw( $url ), $args );
 
 		if ( is_wp_error( $response ) ) {
 			self::log( 'WP response error: ' . $response->get_error_message() );
@@ -109,19 +116,23 @@ class Coinbase_API_Handler {
 	 * @param  string $redirect
 	 * @param  string $name
 	 * @param  string $desc
+	 * @param  string $cancel
 	 * @return array
 	 */
 	public static function create_charge( $amount = null, $currency = null, $metadata = null,
-										$redirect = null, $name = null, $desc = null ) {
+										$redirect = null, $name = null, $desc = null,
+										$cancel = null ) {
 		$args = array(
 			'name'        => is_null( $name ) ? get_bloginfo( 'name' ) : $name,
 			'description' => is_null( $desc ) ? get_bloginfo( 'description' ) : $desc,
 		);
+		$args['name'] = sanitize_text_field( $args['name'] );
+		$args['description'] = sanitize_text_field( $args['description'] );
 
 		if ( is_null( $amount ) ) {
 			$args['pricing_type'] = 'no_price';
 		} elseif ( is_null( $currency ) ) {
-			self::log( 'Error: if amount if given, currency must be given (in create_charge()).', 'error' );
+			self::log( 'Error: if amount is given, currency must be given (in create_charge()).', 'error' );
 			return array( false, 'Missing currency.' );
 		} else {
 			$args['pricing_type'] = 'fixed_price';
@@ -136,6 +147,9 @@ class Coinbase_API_Handler {
 		}
 		if ( ! is_null( $redirect ) ) {
 			$args['redirect_url'] = $redirect;
+		}
+		if ( ! is_null( $cancel ) ) {
+			$args['cancel_url'] = $cancel;
 		}
 
 		$result = self::send_request( 'charges', $args, 'POST' );

@@ -3,7 +3,7 @@
 Plugin Name:  Coinbase Commerce
 Plugin URI:   https://github.com/coinbase/coinbase-commerce-woocommerce/
 Description:  A payment gateway that allows your customers to pay with cryptocurrency via Coinbase Commerce (https://commerce.coinbase.com/)
-Version:      1.0.1
+Version:      1.1.0
 Author:       Coinbase Commerce
 Author URI:   https://commerce.coinbase.com/
 License:      GPLv3+
@@ -38,6 +38,9 @@ function cb_init_gateway() {
 		add_action( 'cb_check_orders', 'cb_wc_check_orders' );
 		add_filter( 'woocommerce_payment_gateways', 'cb_wc_add_coinbase_class' );
 		add_filter( 'wc_order_statuses', 'cb_wc_add_status' );
+		add_action( 'woocommerce_admin_order_data_after_order_details', 'cb_order_meta_general' );
+		add_action( 'woocommerce_order_details_after_order_table', 'cb_order_meta_general' );
+		add_filter( 'woocommerce_email_order_meta_fields', 'cb_custom_woocommerce_email_order_meta_fields', 10, 3 );
 	}
 }
 add_action( 'plugins_loaded', 'cb_init_gateway' );
@@ -108,4 +111,43 @@ function cb_wc_add_status( $wc_statuses_arr ) {
 	}
 
 	return $new_statuses_arr;
+}
+
+
+/**
+ * Add order Coinbase meta after General and before Billing
+ *
+ * @see: https://rudrastyh.com/woocommerce/customize-order-details.html
+ *
+ * @param WC_Order $order WC order instance
+ */
+function cb_order_meta_general( $order ){ ?>
+
+	<br class="clear" />
+	<h3>Coinbase Commerce Data</h3>
+	<div class="">
+		<p>Coinbase Commerce Reference # <?php echo esc_html( $order->get_meta( '_coinbase_charge_id' ) ); ?></p>
+	</div>
+
+	<?php
+}
+
+
+/**
+ * Add Coinbase meta to WC emails
+ *
+ * @see https://docs.woocommerce.com/document/add-a-custom-field-in-an-order-to-the-emails/
+ *
+ * @param array    $fields indexed list of existing additional fields.
+ * @param bool     $sent_to_admin If should sent to admin.
+ * @param WC_Order $order WC order instance
+ *
+ */
+function cb_custom_woocommerce_email_order_meta_fields( $fields, $sent_to_admin, $order ) {
+    $fields['coinbase_commerce_reference'] = array(
+        'label' => __( 'Coinbase Commerce Reference #' ),
+        'value' => $order->get_meta( '_coinbase_charge_id' ),
+    );
+
+    return $fields;
 }

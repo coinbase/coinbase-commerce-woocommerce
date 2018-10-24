@@ -4,6 +4,20 @@ A WooCommerce payment gateway that allows your customers to pay with cryptocurre
 
 ## Installation
 
+### From WordPress.org
+
+This plugin is available on the [WordPress.org plugin repository], and can be installed either directly from there or from the admin dashboard within your website.
+
+#### Within your WordPress dashboard
+1. Visit ‘Plugins > Add New’
+2. Search for ‘Coinbase Commerce’
+3. Activate Coinbase Commerce from your Plugins page.
+
+#### From WordPress.org plugin repository
+1. Download Coinbase Commerce from <https://wordpress.org/plugins/coinbase-commerce/>
+2. Upload to your ‘/wp-content/plugins/’ directory, using your favorite method (ftp, sftp, scp, etc…)
+3. Activate Coinbase Commerce from your Plugins page.
+
 ### From this repository
 
 Within the Github repository, click the Clone or Download button and Download a zip file of the repository, or clone it directly via command line.
@@ -80,6 +94,16 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
+## 1.1.0 ##
+* Added support for charge cancel url.
+* Handle cancelled events from API.
+* Add option to disable icons on checkout page.
+* Add Coinbase Commerce transaction ID to WooCommerce order output (Admin order page, Customer order page, email confirmation).
+* Updated README.md
+
+## 1.0.2 ##
+* Tested against WordPress 4.9.4
+
 ## 1.0.1 ##
 * Tested against WordPress 4.9.7
 * Tested against WooCommerce 3.4.3
@@ -95,4 +119,4 @@ This project is licensed under the Apache 2.0 License
 [Coinbase Commerce settings page]: <https://commerce.coinbase.com/dashboard/settings/>
 [WooCommerce]: <https://woocommerce.com/>
 [WordPress]: <https://wordpress.org/>
-
+[WordPress.org plugin repository]: <https://wordpress.org/plugins/coinbase-commerce/>
