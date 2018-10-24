@@ -94,10 +94,15 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
-## 1.0.2 ##
+## 1.1.0 ##
 * Added support for charge cancel url.
 * Handle cancelled events from API.
 * Add option to disable icons on checkout page.
+* Add Coinbase Commerce transaction ID to WooCommerce order output (Admin order page, Customer order page, email confirmation).
+* Updated README.md
+
+## 1.0.2 ##
+* Tested against WordPress 4.9.4
 
 ## 1.0.1 ##
 * Tested against WordPress 4.9.7
