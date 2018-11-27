@@ -214,6 +214,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		$metadata = array(
 			'order_id'  => $order->get_id(),
 			'order_key' => $order->get_order_key(),
+            		'source' => 'woocommerce'
 		);
 		$result   = Coinbase_API_Handler::create_charge(
 			$order->get_total(), get_woocommerce_currency(), $metadata,
