@@ -88,6 +88,10 @@ To use this plugin with your WooCommerce store you will need:
 
 The plugin supports all cryptocurrencies available at [Coinbase Commerce]
 
+**Does Coinbase Commerce have integrations with other commerce platforms?**
+
+Yes, the list of all integrations can be found here: [Coinbase Commerce Integrations](https://commerce.coinbase.com/integrate).
+
 ## License
 
 This project is licensed under the Apache 2.0 License
