@@ -3,7 +3,7 @@
 Plugin Name:  Coinbase Commerce
 Plugin URI:   https://github.com/coinbase/coinbase-commerce-woocommerce/
 Description:  A payment gateway that allows your customers to pay with cryptocurrency via Coinbase Commerce (https://commerce.coinbase.com/)
-Version:      1.1.0
+Version:      1.1.1
 Author:       Coinbase Commerce
 Author URI:   https://commerce.coinbase.com/
 License:      GPLv3+
@@ -121,15 +121,19 @@ function cb_wc_add_status( $wc_statuses_arr ) {
  *
  * @param WC_Order $order WC order instance
  */
-function cb_order_meta_general( $order ){ ?>
+function cb_order_meta_general( $order )
+{
+    if ($order->payment_method == 'coinbase') {
+        ?>
 
-	<br class="clear" />
-	<h3>Coinbase Commerce Data</h3>
-	<div class="">
-		<p>Coinbase Commerce Reference # <?php echo esc_html( $order->get_meta( '_coinbase_charge_id' ) ); ?></p>
-	</div>
+        <br class="clear"/>
+        <h3>Coinbase Commerce Data</h3>
+        <div class="">
+            <p>Coinbase Commerce Reference # <?php echo esc_html($order->get_meta('_coinbase_charge_id')); ?></p>
+        </div>
 
-	<?php
+        <?php
+    }
 }
 
 
@@ -144,10 +148,12 @@ function cb_order_meta_general( $order ){ ?>
  *
  */
 function cb_custom_woocommerce_email_order_meta_fields( $fields, $sent_to_admin, $order ) {
-    $fields['coinbase_commerce_reference'] = array(
-        'label' => __( 'Coinbase Commerce Reference #' ),
-        'value' => $order->get_meta( '_coinbase_charge_id' ),
-    );
+    if ($order->payment_method == 'coinbase') {
+        $fields['coinbase_commerce_reference'] = array(
+            'label' => __( 'Coinbase Commerce Reference #' ),
+            'value' => $order->get_meta( '_coinbase_charge_id' ),
+        );
+    }
 
     return $fields;
 }
