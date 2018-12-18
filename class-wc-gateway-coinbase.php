@@ -355,16 +355,22 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			} elseif ( 'CANCELED' === $status ) {
 				$order->update_status( 'cancelled', __( 'Coinbase payment cancelled.', 'coinbase' ) );
 			} elseif ( 'UNRESOLVED' === $status ) {
-				// translators: Coinbase error status for "unresolved" payment. Includes error status.
-				$order->update_status( 'failed', sprintf( __( 'Coinbase payment unresolved, reason: %s.', 'coinbase' ), $last_update['context'] ) );
+			    	if ($last_update['context'] === 'OVERPAID') {
+                    			$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
+                    			$order->payment_complete();
+                		} else {
+                    			// translators: Coinbase error status for "unresolved" payment. Includes error status.
+                    			$order->update_status( 'failed', sprintf( __( 'Coinbase payment unresolved, reason: %s.', 'coinbase' ), $last_update['context'] ) );
+                		}	
 			} elseif ( 'PENDING' === $status ) {
 				$order->update_status( 'blockchainpending', __( 'Coinbase payment detected, but awaiting blockchain confirmation.', 'coinbase' ) );
 			} elseif ( 'RESOLVED' === $status ) {
 				// We don't know the resolution, so don't change order status.
 				$order->add_order_note( __( 'Coinbase payment marked as resolved.', 'coinbase' ) );
-			} elseif ( 'COMPLETED' === $status ) {
-				$order->payment_complete();
-			}
+            		} elseif ( 'COMPLETED' === $status ) {
+                		$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
+                		$order->payment_complete();
+            		}
 		}
 
 		// Archive if in a resolved state and idle more than timeout.
