@@ -123,7 +123,7 @@ function cb_wc_add_status( $wc_statuses_arr ) {
  */
 function cb_order_meta_general( $order )
 {
-    if ($order->payment_method == 'coinbase') {
+    if ($order->get_payment_method() == 'coinbase') {
         ?>
 
         <br class="clear"/>
@@ -148,7 +148,7 @@ function cb_order_meta_general( $order )
  *
  */
 function cb_custom_woocommerce_email_order_meta_fields( $fields, $sent_to_admin, $order ) {
-    if ($order->payment_method == 'coinbase') {
+    if ($order->get_payment_method() == 'coinbase') {
         $fields['coinbase_commerce_reference'] = array(
             'label' => __( 'Coinbase Commerce Reference #' ),
             'value' => $order->get_meta( '_coinbase_charge_id' ),
