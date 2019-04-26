@@ -260,7 +260,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		$this->init_api();
 
 		// Check the status of non-archived Coinbase orders.
-		$orders = wc_get_orders( array( 'coinbase_archived' => false ) );
+		$orders = wc_get_orders( array( 'coinbase_archived' => false, 'status'   => array( 'wc-pending' ) ) );
 		foreach ( $orders as $order ) {
 			$charge_id = $order->get_meta( '_coinbase_charge_id' );
 
@@ -350,7 +350,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		if ( $status !== $prev_status ) {
 			$order->update_meta_data( '_coinbase_status', $status );
 
-			if ( 'EXPIRED' === $status ) {
+			if ( 'EXPIRED' === $status && 'pending' == $order->get_status() ) {
 				$order->update_status( 'cancelled', __( 'Coinbase payment expired.', 'coinbase' ) );
 			} elseif ( 'CANCELED' === $status ) {
 				$order->update_status( 'cancelled', __( 'Coinbase payment cancelled.', 'coinbase' ) );
