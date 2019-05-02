@@ -91,7 +91,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 		$image_path = plugin_dir_path( __FILE__ ) . 'assets/images';
 		$icon_html  = '';
-		$methods    = get_option( 'coinbase_payment_methods', array( 'bitcoin', 'bitcoincash', 'ethereum', 'litecoin' ) );
+		$methods    = get_option( 'coinbase_payment_methods', array( 'bitcoin', 'bitcoincash', 'ethereum', 'litecoin', 'usdc' ) );
 
 		// Load icon for each available payment method.
 		foreach ( $methods as $m ) {
@@ -361,7 +361,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
                 		} else {
                     			// translators: Coinbase error status for "unresolved" payment. Includes error status.
                     			$order->update_status( 'failed', sprintf( __( 'Coinbase payment unresolved, reason: %s.', 'coinbase' ), $last_update['context'] ) );
-                		}	
+                		}
 			} elseif ( 'PENDING' === $status ) {
 				$order->update_status( 'blockchainpending', __( 'Coinbase payment detected, but awaiting blockchain confirmation.', 'coinbase' ) );
 			} elseif ( 'RESOLVED' === $status ) {
