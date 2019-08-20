@@ -98,6 +98,9 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
+## 1.1.4 ##
+* Bug fix: Sending order confirmation emails in WooCommerce.
+
 ## 1.1.0 ##
 * Added support for charge cancel url.
 * Handle cancelled events from API.
