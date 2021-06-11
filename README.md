@@ -1,4 +1,5 @@
 # Coinbase Commerce for WooCommerce
+**Note: This repository is not actively maintained.**
 
 A WooCommerce payment gateway that allows your customers to pay with cryptocurrency via Coinbase Commerce
 
