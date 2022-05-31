@@ -61,7 +61,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_filter( 'woocommerce_order_data_store_cpt_get_orders_query', array( $this, '_custom_query_var' ), 10, 2 );
-		add_action( 'woocommerce_api_wc_gateway_coinbase', array( $this, 'handle_webhook' ) );
+		add_action( 'woocommerce_api_wc_gateway_coinbase', array( $this, 'register_rest_route' ) );
 	}
 
 	/**
@@ -159,7 +159,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				. '<br />' .
 
 				// translators: Step 2 of the instructions for 'webhook shared secrets' on settings page. Includes webhook URL.
-				sprintf( __( '2. Click \'Add an endpoint\' and paste the following URL: %s', 'coinbase' ), add_query_arg( 'wc-api', 'WC_Gateway_Coinbase', home_url( '/', 'https' ) ) )
+				sprintf( __( '2. Click \'Add an endpoint\' and paste the following URL: %s', 'coinbase' ), add_query_arg( 'wc-api', 'webhook/v1/coinbase_commerce_webhook', home_url( '/', 'https' ) ) )
 
 				. '<br />' .
 
@@ -277,6 +277,22 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			$this->_update_order_status( $order, $timeline );
 		}
 	}
+
+    /**
+     * Register Rest route call-back
+     * @since 1.4
+     * @version 1.0
+     */
+    public function register_rest_route()
+    {
+        register_rest_route( 'webhook/v1', '/coinbase_commerce_webhook', array(
+            'methods'   => 'POST',
+            'callback'  => array( $this, 'handle_webhook' ),
+            'permission_callback' => function () {
+                return true;
+            }
+        ));
+    }
 
 	/**
 	 * Handle requests sent to webhook.
