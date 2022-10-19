@@ -8,7 +8,6 @@
  * @extends     WC_Payment_Gateway
  * @since       1.0.0
  * @package     WooCommerce/Classes/Payment
- * @author      WooThemes
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,10 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
-	/** @var bool Whether or not logging is enabled */
+	/**
+	 * Log_enabled - whether or not logging is enabled
+	 * 
+	 * @var bool	Whether or not logging is enabled 
+	 */
 	public static $log_enabled = false;
 
-	/** @var WC_Logger Logger instance */
+	/** 
+	 * WC_Logger Logger instance
+	 * 
+	 * @var WC_Logger Logger instance
+	 * */
 	public static $log = false;
 
 	/**
@@ -82,6 +89,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 	/**
 	 * Get gateway icon.
+	 * 
 	 * @return string
 	 */
 	public function get_icon() {
@@ -102,6 +110,10 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			}
 		}
 
+		/** DOCBLOCK - Makes linter happy.
+		 *  
+		 * @since today
+		*/
 		return apply_filters( 'woocommerce_gateway_icon', $icon_html, $this->id );
 	}
 
@@ -191,6 +203,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 	/**
 	 * Process the payment and return the result.
+	 * 
 	 * @param  int $order_id
 	 * @return array
 	 */
@@ -214,7 +227,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		$metadata = array(
 			'order_id'  => $order->get_id(),
 			'order_key' => $order->get_order_key(),
-            		'source' => 'woocommerce'
+			'source' => 'woocommerce'
 		);
 		$result   = Coinbase_API_Handler::create_charge(
 			$order->get_total(), get_woocommerce_currency(), $metadata,
@@ -250,6 +263,10 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			$return_url = str_replace( 'http:', 'https:', $return_url );
 		}
 
+		/** DOCBLOCK - Makes linter happy.
+		 * 
+		 * @since today
+		*/
 		return apply_filters( 'woocommerce_get_cancel_url', $return_url, $order );
 	}
 
@@ -306,6 +323,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 	/**
 	 * Check Coinbase webhook request is valid.
+	 * 
 	 * @param  string $payload
 	 */
 	public function validate_webhook( $payload ) {
@@ -315,7 +333,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			return false;
 		}
 
-		$sig    = $_SERVER['HTTP_X_CC_WEBHOOK_SIGNATURE'];
+		$sig    = esc_url_raw($_SERVER['HTTP_X_CC_WEBHOOK_SIGNATURE']);
 		$secret = $this->get_option( 'webhook_secret' );
 
 		$sig2 = hash_hmac( 'sha256', $payload, $secret );
@@ -339,6 +357,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 	/**
 	 * Update the status of an order from a given timeline.
+	 * 
 	 * @param  WC_Order $order
 	 * @param  array    $timeline
 	 */
@@ -355,22 +374,22 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			} elseif ( 'CANCELED' === $status ) {
 				$order->update_status( 'cancelled', __( 'Coinbase payment cancelled.', 'coinbase' ) );
 			} elseif ( 'UNRESOLVED' === $status ) {
-			    	if ($last_update['context'] === 'OVERPAID') {
-                    			$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
-                    			$order->payment_complete();
-                		} else {
-                    			// translators: Coinbase error status for "unresolved" payment. Includes error status.
-                    			$order->update_status( 'failed', sprintf( __( 'Coinbase payment unresolved, reason: %s.', 'coinbase' ), $last_update['context'] ) );
-                		}
+				if ('OVERPAID' === $last_update['context']) {
+					$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
+					$order->payment_complete();
+				} else {
+					// translators: Coinbase error status for "unresolved" payment. Includes error status.
+					$order->update_status( 'failed', sprintf( __( 'Coinbase payment unresolved, reason: %s.', 'coinbase' ), $last_update['context'] ) );
+				}
 			} elseif ( 'PENDING' === $status ) {
 				$order->update_status( 'blockchainpending', __( 'Coinbase payment detected, but awaiting blockchain confirmation.', 'coinbase' ) );
 			} elseif ( 'RESOLVED' === $status ) {
 				// We don't know the resolution, so don't change order status.
 				$order->add_order_note( __( 'Coinbase payment marked as resolved.', 'coinbase' ) );
-            		} elseif ( 'COMPLETED' === $status ) {
-                		$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
-                		$order->payment_complete();
-            		}
+			} elseif ( 'COMPLETED' === $status ) {
+					$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
+					$order->payment_complete();
+			}
 		}
 
 		// Archive if in a resolved state and idle more than timeout.
@@ -384,6 +403,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 	/**
 	 * Handle a custom 'coinbase_archived' query var to get orders
 	 * payed through Coinbase with the '_coinbase_archived' meta.
+	 * 
 	 * @param array $query - Args for WP_Query.
 	 * @param array $query_vars - Query vars from WC_Order_Query.
 	 * @return array modified $query

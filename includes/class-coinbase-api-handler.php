@@ -9,7 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Coinbase_API_Handler {
 
-	/** @var string/array Log variable function. */
+	/**
+	 * Log variable function
+	 * 
+	 * @var string/array Log variable function.
+	 * */
 	public static $log;
 	/**
 	 * Call the $log variable function.
@@ -22,17 +26,30 @@ class Coinbase_API_Handler {
 		return call_user_func( self::$log, $message, $level );
 	}
 
-	/** @var string Coinbase API url. */
+	/**
+	 * Coinbase API url
+	 * 
+	 * @var string Coinbase API url.
+	 * */
 	public static $api_url = 'https://api.commerce.coinbase.com/';
 
-	/** @var string Coinbase API version. */
+	/**
+	 * Coinbase API version
+	 * 
+	 * @var string Coinbase API version.
+	 * */
 	public static $api_version = '2018-03-22';
 
-	/** @var string Coinbase API key. */
+	/**
+	 * Coinbase API key
+	 * 
+	 * @var string Coinbase API key.
+	 * */
 	public static $api_key;
 
 	/**
 	 * Get the response from an API request.
+	 * 
 	 * @param  string $endpoint
 	 * @param  array  $params
 	 * @param  string $method
@@ -96,6 +113,7 @@ class Coinbase_API_Handler {
 
 	/**
 	 * Check if authentication is successful.
+	 * 
 	 * @return bool|string
 	 */
 	public static function check_auth() {
@@ -110,6 +128,7 @@ class Coinbase_API_Handler {
 
 	/**
 	 * Create a new charge request.
+	 * 
 	 * @param  int    $amount
 	 * @param  string $currency
 	 * @param  array  $metadata
