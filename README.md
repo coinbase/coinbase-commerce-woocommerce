@@ -1,4 +1,5 @@
 # Coinbase Commerce for WooCommerce
+
 **Note: This repository is not actively maintained.**
 
 A WooCommerce payment gateway that allows your customers to pay with cryptocurrency via Coinbase Commerce
@@ -10,11 +11,13 @@ A WooCommerce payment gateway that allows your customers to pay with cryptocurre
 This plugin is available on the [WordPress.org plugin repository], and can be installed either directly from there or from the admin dashboard within your website.
 
 #### Within your WordPress dashboard
+
 1. Visit ‘Plugins > Add New’
 2. Search for ‘Coinbase Commerce’
 3. Activate Coinbase Commerce from your Plugins page.
 
 #### From WordPress.org plugin repository
+
 1. Download Coinbase Commerce from <https://wordpress.org/plugins/coinbase-commerce/>
 2. Upload to your ‘/wp-content/plugins/’ directory, using your favorite method (ftp, sftp, scp, etc…)
 3. Activate Coinbase Commerce from your Plugins page.
@@ -80,8 +83,8 @@ If this is checked, these are saved within your `wp-content/uploads/wc-logs/` fo
 
 To use this plugin with your WooCommerce store you will need:
 
-* [WordPress] (tested up to 4.9.7)
-* [WooCommerce] (tested up to 3.4.3)
+- [WordPress] (tested up to 4.9.7)
+- [WooCommerce] (tested up to 3.4.3)
 
 ## Frequently Asked Questions
 
@@ -99,32 +102,41 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
-## 1.1.4 ##
-* Bug fix: Sending order confirmation emails in WooCommerce.
+## 1.2
 
-## 1.1.0 ##
-* Added support for charge cancel url.
-* Handle cancelled events from API.
-* Add option to disable icons on checkout page.
-* Add Coinbase Commerce transaction ID to WooCommerce order output (Admin order page, Customer order page, email confirmation).
-* Updated README.md
+- Tested against WordPress 6.0
+- Tested against WooCommerce 6.5.1
 
-## 1.0.2 ##
-* Tested against WordPress 4.9.4
+## 1.1.4
 
-## 1.0.1 ##
-* Tested against WordPress 4.9.7
-* Tested against WooCommerce 3.4.3
-* Updated README.md
-* Updated plugin meta in coinbase-commerce.php
+- Bug fix: Sending order confirmation emails in WooCommerce.
 
-## 1.0.0 ##
-* Coinbase Commerce
+## 1.1.0
 
-[//]: # (Comments for storing reference material in. Stripped out when processing the markdown)
+- Added support for charge cancel url.
+- Handle cancelled events from API.
+- Add option to disable icons on checkout page.
+- Add Coinbase Commerce transaction ID to WooCommerce order output (Admin order page, Customer order page, email confirmation).
+- Updated README.md
 
-[Coinbase Commerce]: <https://commerce.coinbase.com/>
-[Coinbase Commerce settings page]: <https://commerce.coinbase.com/dashboard/settings/>
-[WooCommerce]: <https://woocommerce.com/>
-[WordPress]: <https://wordpress.org/>
-[WordPress.org plugin repository]: <https://wordpress.org/plugins/coinbase-commerce/>
+## 1.0.2
+
+- Tested against WordPress 4.9.4
+
+## 1.0.1
+
+- Tested against WordPress 4.9.7
+- Tested against WooCommerce 3.4.3
+- Updated README.md
+- Updated plugin meta in coinbase-commerce.php
+
+## 1.0.0
+
+- Coinbase Commerce
+
+[//]: # "Comments for storing reference material in. Stripped out when processing the markdown"
+[Coinbase Commerce]: https://commerce.coinbase.com/
+[Coinbase Commerce settings page]: https://commerce.coinbase.com/dashboard/settings/
+[WooCommerce]: https://woocommerce.com/
+[WordPress]: https://wordpress.org/
+[WordPress.org plugin repository]: https://wordpress.org/plugins/coinbase-commerce/

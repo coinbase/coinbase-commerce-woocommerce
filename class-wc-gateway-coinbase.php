@@ -8,6 +8,7 @@
  * @extends     WC_Payment_Gateway
  * @since       1.0.0
  * @package     WooCommerce/Classes/Payment
+ * @author      WooThemes
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -99,7 +100,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 		$image_path = plugin_dir_path( __FILE__ ) . 'assets/images';
 		$icon_html  = '';
-		$methods    = get_option( 'coinbase_payment_methods', array( 'bitcoin', 'bitcoincash', 'dai', 'ethereum', 'litecoin', 'dogecoin', 'usdc' ) );
+		$methods    = get_option( 'coinbase_payment_methods', array( 'bitcoin', 'bitcoincash', 'dai', 'ethereum', 'litecoin', 'dogecoin', 'usdc', 'usdt', 'ape', 'shib' ) );
 
 		// Load icon for each available payment method.
 		foreach ( $methods as $m ) {
@@ -227,7 +228,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		$metadata = array(
 			'order_id'  => $order->get_id(),
 			'order_key' => $order->get_order_key(),
-			'source' => 'woocommerce'
+            		'source' => 'woocommerce'
 		);
 		$result   = Coinbase_API_Handler::create_charge(
 			$order->get_total(), get_woocommerce_currency(), $metadata,
@@ -277,7 +278,23 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		$this->init_api();
 
 		// Check the status of non-archived Coinbase orders.
-		$orders = wc_get_orders( array( 'coinbase_archived' => false, 'status'   => array( 'wc-pending' ) ) );
+		$orders = wc_get_orders(
+			array(
+				'coinbase_archived' => false,
+				'status' => array( 'wc-pending' ),
+				'meta_query' => array(
+					array(
+					'key' => '_coinbase_archived',
+					'compare' => 'NOT EXISTS',
+					),
+					array(
+					'key' => '_coinbase_charge_id',
+					'compare' => 'EXISTS',
+					)
+				)
+			)
+		);
+
 		foreach ( $orders as $order ) {
 			$charge_id = $order->get_meta( '_coinbase_charge_id' );
 
@@ -387,8 +404,8 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				// We don't know the resolution, so don't change order status.
 				$order->add_order_note( __( 'Coinbase payment marked as resolved.', 'coinbase' ) );
 			} elseif ( 'COMPLETED' === $status ) {
-					$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
-					$order->payment_complete();
+				$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
+				$order->payment_complete();
 			}
 		}
 

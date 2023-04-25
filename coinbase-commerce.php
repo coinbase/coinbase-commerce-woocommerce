@@ -3,7 +3,7 @@
 Plugin Name:  Coinbase Commerce
 Plugin URI:   https://github.com/coinbase/coinbase-commerce-woocommerce/
 Description:  A payment gateway that allows your customers to pay with cryptocurrency via Coinbase Commerce (https://commerce.coinbase.com/)
-Version:      1.1.4
+Version:      1.2.1
 Author:       Coinbase Commerce
 Author URI:   https://commerce.coinbase.com/
 License:      GPLv3+
@@ -12,7 +12,7 @@ Text Domain:  coinbase
 Domain Path:  /languages
 
 WC requires at least: 3.0.9
-WC tested up to: 3.6.3
+WC tested up to: 6.5.1
 
 Coinbase Commerce is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -129,17 +129,17 @@ function cb_wc_add_status( $wc_statuses_arr ) {
  * @param WC_Order $order WC order instance
  */
 function cb_order_meta_general( $order ) {
-	if ($order->get_payment_method() == 'coinbase') {
-		?>
+    if ($order->get_payment_method() == 'coinbase') {
+        ?>
 
-		<br class="clear"/>
-		<h3>Coinbase Commerce Data</h3>
-		<div class="">
-			<p>Coinbase Commerce Reference # <?php echo esc_html($order->get_meta('_coinbase_charge_id')); ?></p>
-		</div>
+        <br class="clear"/>
+        <h3>Coinbase Commerce Data</h3>
+        <div class="">
+            <p>Coinbase Commerce Reference # <?php echo esc_html($order->get_meta('_coinbase_charge_id')); ?></p>
+        </div>
 
-		<?php
-	}
+        <?php
+    }
 }
 
 
@@ -154,14 +154,14 @@ function cb_order_meta_general( $order ) {
  *
  */
 function cb_custom_woocommerce_email_order_meta_fields( $fields, $sent_to_admin, $order ) {
-	if ($order->get_payment_method() == 'coinbase') {
-		$fields['coinbase_commerce_reference'] = array(
-			'label' => __( 'Coinbase Commerce Reference #' ),
-			'value' => $order->get_meta( '_coinbase_charge_id' ),
-		);
-	}
+    if ($order->get_payment_method() == 'coinbase') {
+        $fields['coinbase_commerce_reference'] = array(
+            'label' => __( 'Coinbase Commerce Reference #' ),
+            'value' => $order->get_meta( '_coinbase_charge_id' ),
+        );
+    }
 
-	return $fields;
+    return $fields;
 }
 
 
@@ -173,9 +173,9 @@ function cb_custom_woocommerce_email_order_meta_fields( $fields, $sent_to_admin,
  * @return array
  */
 function cb_register_email_action( $email_actions ) {
-	$email_actions[] = 'woocommerce_order_status_blockchainpending_to_processing';
+    $email_actions[] = 'woocommerce_order_status_blockchainpending_to_processing';
 
-	return $email_actions;
+    return $email_actions;
 }
 
 
@@ -185,32 +185,32 @@ function cb_register_email_action( $email_actions ) {
  * @param WC_Emails $wc_emails
  */
 function cb_add_email_triggers( $wc_emails ) {
-	$emails = $wc_emails->get_emails();
+    $emails = $wc_emails->get_emails();
 
-	/**
-	 * A list of WooCommerce emails sent when the order status transitions to Processing.
-	 *
-	 * Developers can use the `cb_processing_order_emails` filter to add in their own emails.
-	 *
-	 * @param array $emails List of email class names.
-	 *
-	 * @return array
-	 * 
+    /**
+     * A list of WooCommerce emails sent when the order status transitions to Processing.
+     *
+     * Developers can use the `cb_processing_order_emails` filter to add in their own emails.
+     *
+     * @param array $emails List of email class names.
+     *
+     * @return array
+     * 
 	 * @since today
-	 */
-	$processing_order_emails = apply_filters( 'cb_processing_order_emails', [
-		'WC_Email_New_Order',
-		'WC_Email_Customer_Processing_Order',
-	] );
+     */
+    $processing_order_emails = apply_filters( 'cb_processing_order_emails', [
+        'WC_Email_New_Order',
+        'WC_Email_Customer_Processing_Order',
+    ] );
 
-	foreach ( $processing_order_emails as $email_class ) {
-		if ( isset( $emails[ $email_class ] ) ) {
-			$email = $emails[ $email_class ];
+    foreach ( $processing_order_emails as $email_class ) {
+        if ( isset( $emails[ $email_class ] ) ) {
+            $email = $emails[ $email_class ];
 
-			add_action(
-				'woocommerce_order_status_blockchainpending_to_processing_notification',
-				array( $email, 'trigger' )
-			);
-		}
-	}
+            add_action(
+                'woocommerce_order_status_blockchainpending_to_processing_notification',
+                array( $email, 'trigger' )
+            );
+        }
+    }
 }
