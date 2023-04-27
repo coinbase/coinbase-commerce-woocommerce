@@ -8,7 +8,6 @@
  * @extends     WC_Payment_Gateway
  * @since       1.0.0
  * @package     WooCommerce/Classes/Payment
- * @author      WooThemes
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -228,7 +227,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		$metadata = array(
 			'order_id'  => $order->get_id(),
 			'order_key' => $order->get_order_key(),
-            		'source' => 'woocommerce'
+			'source' => 'woocommerce'
 		);
 		$result   = Coinbase_API_Handler::create_charge(
 			$order->get_total(), get_woocommerce_currency(), $metadata,
@@ -350,7 +349,8 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 			return false;
 		}
 
-		$sig    = esc_url_raw($_SERVER['HTTP_X_CC_WEBHOOK_SIGNATURE']);
+		$sig = $_SERVER['HTTP_X_CC_WEBHOOK_SIGNATURE'];
+
 		$secret = $this->get_option( 'webhook_secret' );
 
 		$sig2 = hash_hmac( 'sha256', $payload, $secret );
