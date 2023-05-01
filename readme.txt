@@ -5,7 +5,7 @@ Tags: coinbase, woo, woocommerce, ecommerce, bitcoin, ethereum, litecoin, bitcas
 Requires at least: 3.0
 Requires PHP: 5.6+
 Tested up to: 6.0
-Stable tag: 1.2.1
+Stable tag: 1.3
 License: GPLv2 or later
 
 == Description ==
@@ -101,6 +101,9 @@ This plugin replaces the previous deprecated coinbase-woocommerce plugin.
 
 
 == Changelog ==
+
+= 1.3 =
+* Adds HPOS support
 
 = 1.2 =
 * Tested against WordPress 6.0

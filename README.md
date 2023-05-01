@@ -102,6 +102,10 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
+## 1.3
+
+- Adds HPOS support
+
 ## 1.2
 
 - Tested against WordPress 6.0
