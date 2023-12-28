@@ -392,7 +392,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				$order->update_status( 'cancelled', __( 'Coinbase payment cancelled.', 'coinbase' ) );
 			} elseif ( 'UNRESOLVED' === $status ) {
 				if ('OVERPAID' === $last_update['context']) {
-					$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
+					$order->update_status( 'completed', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
 					$order->payment_complete();
 				} else {
 					// translators: Coinbase error status for "unresolved" payment. Includes error status.
@@ -404,7 +404,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				// We don't know the resolution, so don't change order status.
 				$order->add_order_note( __( 'Coinbase payment marked as resolved.', 'coinbase' ) );
 			} elseif ( 'COMPLETED' === $status ) {
-				$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
+				$order->update_status( 'completed', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
 				$order->payment_complete();
 			}
 		}
