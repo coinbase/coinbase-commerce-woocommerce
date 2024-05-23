@@ -241,7 +241,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 		$charge = $result[1]['data'];
 
-		$order->update_meta_data( '_coinbase_charge_id', $charge['code'] );
+		$order->update_meta_data( '_coinbase_charge_id', $charge['id'] );
 		$order->save();
 
 		return array(
