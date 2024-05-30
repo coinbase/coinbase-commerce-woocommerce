@@ -102,6 +102,11 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
+## 1.4.1
+
+- Tested against WordPress 6.5.3
+- Tested against WooCommerce 8.9.1
+
 ## 1.4
 
 - Declare HPOS Compatibility
