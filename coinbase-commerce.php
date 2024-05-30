@@ -12,7 +12,7 @@ Text Domain:  coinbase
 Domain Path:  /languages
 
 WC requires at least: 3.0.9
-WC tested up to: 6.5.1
+WC tested up to: 8.9.1
 
 Coinbase Commerce is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
