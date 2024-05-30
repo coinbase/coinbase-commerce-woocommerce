@@ -132,7 +132,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				'title'       => __( 'Title', 'woocommerce' ),
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woocommerce' ),
-				'default'     => __( 'Bitcoin and other cryptocurrencies', 'coinbase' ),
+				'default'     => __( 'Ethereum and other cryptocurrencies', 'coinbase' ),
 				'desc_tip'    => true,
 			),
 			'description'    => array(
@@ -140,7 +140,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				'type'        => 'text',
 				'desc_tip'    => true,
 				'description' => __( 'This controls the description which the user sees during checkout.', 'woocommerce' ),
-				'default'     => __( 'Pay with Bitcoin or other cryptocurrencies.', 'coinbase' ),
+				'default'     => __( 'Pay with Ethereum or other cryptocurrencies.', 'coinbase' ),
 			),
 			'api_key'        => array(
 				'title'       => __( 'API Key', 'coinbase' ),

@@ -10,7 +10,7 @@ License: GPLv2 or later
 
 == Description ==
 
-Accept cryptocurrencies through Coinbase Commerce such as Ethereum, Litecoin and Bitcoin Cash on your WooCommerce store.
+Accept cryptocurrencies through Coinbase Commerce such as USDC, Ethereum, and Matic on your WooCommerce store.
 
 == Installation ==
 
