@@ -241,7 +241,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 		$charge = $result[1]['data'];
 
-		$order->update_meta_data( '_coinbase_charge_id', $charge['code'] );
+		$order->update_meta_data( '_coinbase_charge_id', $charge['id'] );
 		$order->save();
 
 		return array(
@@ -327,7 +327,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				exit;
 			}
 
-			$order_id = $event_data['metadata']['order_id'];
+			$order_id = intval($event_data['metadata']['order_id']);
 
 			$this->_update_order_status( wc_get_order( $order_id ), $event_data['timeline'] );
 
@@ -390,19 +390,8 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				$order->update_status( 'cancelled', __( 'Coinbase payment expired.', 'coinbase' ) );
 			} elseif ( 'CANCELED' === $status ) {
 				$order->update_status( 'cancelled', __( 'Coinbase payment cancelled.', 'coinbase' ) );
-			} elseif ( 'UNRESOLVED' === $status ) {
-				if ('OVERPAID' === $last_update['context']) {
-					$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
-					$order->payment_complete();
-				} else {
-					// translators: Coinbase error status for "unresolved" payment. Includes error status.
-					$order->update_status( 'failed', sprintf( __( 'Coinbase payment unresolved, reason: %s.', 'coinbase' ), $last_update['context'] ) );
-				}
 			} elseif ( 'PENDING' === $status ) {
 				$order->update_status( 'blockchainpending', __( 'Coinbase payment detected, but awaiting blockchain confirmation.', 'coinbase' ) );
-			} elseif ( 'RESOLVED' === $status ) {
-				// We don't know the resolution, so don't change order status.
-				$order->add_order_note( __( 'Coinbase payment marked as resolved.', 'coinbase' ) );
 			} elseif ( 'COMPLETED' === $status ) {
 				$order->update_status( 'processing', __( 'Coinbase payment was successfully processed.', 'coinbase' ) );
 				$order->payment_complete();
@@ -410,7 +399,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 		}
 
 		// Archive if in a resolved state and idle more than timeout.
-		if ( in_array( $status, array( 'EXPIRED', 'COMPLETED', 'RESOLVED' ), true ) &&
+		if ( in_array( $status, array( 'EXPIRED', 'COMPLETED' ), true ) &&
 			$order->get_date_modified() < $this->timeout ) {
 			self::log( 'Archiving order: ' . $order->get_order_number() );
 			$order->update_meta_data( '_coinbase_archived', true );

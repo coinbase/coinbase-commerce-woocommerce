@@ -102,6 +102,13 @@ This project is licensed under the Apache 2.0 License
 
 ## Changelog
 
+## 1.4
+
+- Declare HPOS Compatibility
+- Remove deprecated Charge status mappings
+- Fix order_id incorrect format error
+- Update coinbase_charge_id to be charge.id
+
 ## 1.3
 
 - Adds HPOS support

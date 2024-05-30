@@ -3,7 +3,7 @@
 Plugin Name:  Coinbase Commerce
 Plugin URI:   https://github.com/coinbase/coinbase-commerce-woocommerce/
 Description:  A payment gateway that allows your customers to pay with cryptocurrency via Coinbase Commerce (https://commerce.coinbase.com/)
-Version:      1.3
+Version:      1.4
 Author:       Coinbase Commerce
 Author URI:   https://commerce.coinbase.com/
 License:      GPLv3+
@@ -47,6 +47,11 @@ function cb_init_gateway() {
 		add_filter( 'woocommerce_email_order_meta_fields', 'cb_custom_woocommerce_email_order_meta_fields', 10, 3 );
 		add_filter( 'woocommerce_email_actions', 'cb_register_email_action' );
 		add_action( 'woocommerce_email', 'cb_add_email_triggers' );
+		add_action( 'before_woocommerce_init', function() {
+			if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+				\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+			}
+		} );
 	}
 }
 add_action( 'plugins_loaded', 'cb_init_gateway' );
