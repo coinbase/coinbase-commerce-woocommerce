@@ -225,7 +225,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 
 		// Create a new charge.
 		$metadata = array(
-			'order_id'  => $order->get_id(),
+			'order_id'  => strval($order->get_id()),
 			'order_key' => $order->get_order_key(),
 			'source' => 'woocommerce'
 		);
@@ -327,7 +327,7 @@ class WC_Gateway_Coinbase extends WC_Payment_Gateway {
 				exit;
 			}
 
-			$order_id = intval($event_data['metadata']['order_id']);
+			$order_id = $event_data['metadata']['order_id'];
 
 			$this->_update_order_status( wc_get_order( $order_id ), $event_data['timeline'] );
 
