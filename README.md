@@ -83,8 +83,8 @@ If this is checked, these are saved within your `wp-content/uploads/wc-logs/` fo
 
 To use this plugin with your WooCommerce store you will need:
 
-- [WordPress] (tested up to 4.9.7)
-- [WooCommerce] (tested up to 3.4.3)
+- [WordPress] (tested up to 6.5.3)
+- [WooCommerce] (tested up to 8.9.1)
 
 ## Frequently Asked Questions
 
@@ -101,6 +101,11 @@ Yes, the list of all integrations can be found here: [Coinbase Commerce Integrat
 This project is licensed under the Apache 2.0 License
 
 ## Changelog
+
+## 1.4.1
+
+- Tested against WordPress 6.5.3
+- Tested against WooCommerce 8.9.1
 
 ## 1.4
 

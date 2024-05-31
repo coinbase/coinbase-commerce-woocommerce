@@ -1,16 +1,16 @@
 === Coinbase Commerce Payment Gateway for WooCommerce ===
 Contributors: pragbarrett, eddhurst, omidahourai, robbybarton
 Plugin URL: https://commerce.coinbase.com/
-Tags: coinbase, woo, woocommerce, ecommerce, bitcoin, ethereum, litecoin, bitcash, blockchain, commerce, crypto, cryptocurrency
+Tags: coinbase, woocommerce, ethereum, commerce, crypto
 Requires at least: 3.0
-Requires PHP: 5.6+
-Tested up to: 6.0
+Requires PHP: 8.1+
+Tested up to: 6.5.3
 Stable tag: 1.4
 License: GPLv2 or later
 
 == Description ==
 
-Accept cryptocurrencies through Coinbase Commerce such as Bitcoin, Ethereum, Litecoin and Bitcoin Cash on your WooCommerce store.
+Accept cryptocurrencies through Coinbase Commerce such as USDC, Ethereum, and Matic on your WooCommerce store.
 
 == Installation ==
 
@@ -101,6 +101,10 @@ This plugin replaces the previous deprecated coinbase-woocommerce plugin.
 
 
 == Changelog ==
+
+= 1.4.1 =
+* Tested against WordPress 6.5.3
+* Tested against WooCommerce 8.9.1
 
 = 1.4 =
 * Declare HPOS Compatibility
